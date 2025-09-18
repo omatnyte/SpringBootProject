@@ -1,0 +1,22 @@
+[
+  {
+    "title": "First Journal",
+    "content": "This is my first journal entry."
+  },
+  {
+    "title": "Travel Diary",
+    "content": "Visited Udaipur and enjoyed boating in Lake Pichola."
+  },
+  {
+    "title": "Learning Log",
+    "content": "Started learning Spring Boot and MongoDB integration."
+  },
+  {
+    "title": "Workout Notes",
+    "content": "Completed 5km run today in the morning."
+  },
+  {
+    "title": "Random Thoughts",
+    "content": "Exploring journaling app ideas with Spring Boot."
+  }
+]
