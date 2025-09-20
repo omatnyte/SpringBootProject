@@ -23,9 +23,9 @@ public class JournalEntryResponseEntityController {
 
 
     @GetMapping()
-    public List<JournalEntry> getAllEntries() {
+    public ResponseEntity<?> getAllEntries() {
 
-        return journalEntryService.getAllEntries();
+        return new ResponseEntity<>(journalEntryService.getAllEntries(), HttpStatus.OK);
     }
 
     @GetMapping("/id/{id}")
@@ -39,8 +39,6 @@ public class JournalEntryResponseEntityController {
         else{
             return new ResponseEntity<>("Journal entry not found", HttpStatus.NOT_FOUND);
         }
-
-
     }
 
     @PostMapping("/create")
