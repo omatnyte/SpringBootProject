@@ -36,8 +36,6 @@ public class UserEntryService {
     }
 
     public void deleteEntryByUserName(User user) {
-
             userEntryRepository.delete(user);
-
     }
 }
