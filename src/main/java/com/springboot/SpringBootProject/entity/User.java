@@ -1,5 +1,6 @@
 package com.springboot.SpringBootProject.entity;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
@@ -18,9 +19,9 @@ public class User {
     @Id
     private ObjectId id;
     @Indexed(unique = true)
-    @NonNull
+    @NotBlank(message = "Username is mandatory")
     private String userName;
-    @NonNull
+    @NotBlank(message = "Password is mandatory")
     private String userPassword;
 
     @DBRef

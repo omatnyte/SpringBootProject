@@ -5,6 +5,7 @@ import com.springboot.SpringBootProject.entity.JournalEntry;
 import com.springboot.SpringBootProject.entity.User;
 import com.springboot.SpringBootProject.service.JournalEntryService;
 import com.springboot.SpringBootProject.service.UserEntryService;
+import jakarta.validation.Valid;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class UserEntryController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createEntry(@RequestBody User entry) {
+    public ResponseEntity<?> createEntry(@Valid @RequestBody User entry) {
 
         try{
             userEntryService.saveEntry(entry);
