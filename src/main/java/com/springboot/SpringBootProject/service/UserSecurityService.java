@@ -1,7 +1,6 @@
 package com.springboot.SpringBootProject.service;
 
 import com.springboot.SpringBootProject.entity.UserSpringSecurity;
-import com.springboot.SpringBootProject.repository.UserEntryRepository;
 import com.springboot.SpringBootProject.repository.UserSpringSecurityRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,10 @@ public class UserSecurityService {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void saveEntry(UserSpringSecurity entry) {
+        userEntryRepository.save(entry);
+    }
+    public void saveNewEntry(UserSpringSecurity entry) {
         entry.setUserPassword(passwordEncoder.encode(entry.getUserPassword()));
-        entry.setRoles(List.of("USER"));
         userEntryRepository.save(entry);
     }
 

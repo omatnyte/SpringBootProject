@@ -7,10 +7,12 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,9 +24,31 @@ public class UserSecurityController {
 
     @GetMapping()
     public ResponseEntity<?> getAllEntries() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"))) {
+            return new ResponseEntity<>(userSecurityService.getAllEntries(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Access denied: User does not have ADMIN role", HttpStatus.FORBIDDEN);
+        }
+    }
 
+    @GetMapping("/adminCheck")
+    public ResponseEntity<?> getAllEntriesWithAdminCheck() {
+        List<UserSpringSecurity> allEntries = userSecurityService.getAllEntries();
+        if(allEntries != null){
+            return new ResponseEntity<>(allEntries, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("No user entries found", HttpStatus.NOT_FOUND);
+        }
+        }
+
+    @GetMapping("/annotationCheck")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAllEntriesWithAnnotationCheck() {
         return new ResponseEntity<>(userSecurityService.getAllEntries(), HttpStatus.OK);
     }
+
 
     @GetMapping("/id/{id}")
     public ResponseEntity<?> getEntryById(@PathVariable ObjectId id) {
@@ -38,12 +62,25 @@ public class UserSecurityController {
             return new ResponseEntity<>("User entry not found", HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/username")
+    public ResponseEntity<?> getEntryByLogin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        UserSpringSecurity user = userSecurityService.getUserByUsername(currentUserName);
+
+        if(user != null){
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("User entry not found", HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> createEntry(@RequestBody UserSpringSecurity entry) {
 
         try{
-            userSecurityService.saveEntry(entry);
+            userSecurityService.saveNewEntry(entry);
             return new ResponseEntity<>("User entry added successfully", HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error creating user entry: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
