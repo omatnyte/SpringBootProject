@@ -1,5 +1,6 @@
 package com.springboot.SpringBootProject.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Document(collection = "usersSpringSecurity")
 @Data
+@Builder
 public class UserSpringSecurity {
 
     @Id
